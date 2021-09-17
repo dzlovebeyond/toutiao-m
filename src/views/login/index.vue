@@ -2,7 +2,10 @@
 <!-- 为了便于后续控制组件样式，给根节点（元素）起个类名 login-container -->
   <div class="login-container">
       <!-- 顶部导航栏 -->
-      <van-nav-bar class="page-nav-bar" title="登录"/>
+      <van-nav-bar class="page-nav-bar" title="登录">
+        <!-- 利用插槽，增加一个关闭按钮图标，点击后跳转返回上一页面 -->
+        <van-icon slot="left" name="cross" @click="$router.back()" />
+      </van-nav-bar>
       <!-- /顶部导航栏 -->
 
       <!-- 登录表单 -->
@@ -119,6 +122,8 @@ export default {
         this.$toast.success('登陆成功')
         // 将获取到的数据存储到 vuex 的 state 中
         this.$store.commit('setUser', res.data.data)
+        // 登录成功后，跳转回原来的页面
+        this.$router.back()
       } catch (err) {
         if (err.response.status === 400) {
           // 登陆失败后，给出失败提示（同时将终止前面的 toast 加载提示）
