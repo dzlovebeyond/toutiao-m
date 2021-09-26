@@ -128,8 +128,13 @@ export default {
         // console.log(data)
         this.userInfo = data.data
       } catch (err) {
-        // 如果获取失败，则显示提示信息
-        this.$toast('获取数据失败，请稍后重试')
+        if (err.response.status === 401) {
+          // token过期
+          this.$toast('Token过期，请退出后重新登陆')
+        } else {
+          // 如果获取失败，则显示提示信息
+          this.$toast('获取数据失败，请稍后重试')
+        }
       }
     }
   }

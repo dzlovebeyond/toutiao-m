@@ -15,6 +15,9 @@ import './styles/index.less'
 // 加载 flexible 动态设置 REM 基准值
 import 'amfe-flexible'
 
+// 加载 dayjs 初始化配置
+import './utils/dayjs'
+
 // 全局注册vant组件
 Vue.use(Vant)
 
