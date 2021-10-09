@@ -10,6 +10,12 @@ const routes = [{
   name: 'login',
   component: () =>
     import('@/views/login') // 注意：login/后面的index.vue可以省略
+}, {
+  // 搜索页面
+  path: '/search',
+  name: 'search',
+  component: () =>
+    import('@/views/search')
 },
 {
   // Layout布局页面

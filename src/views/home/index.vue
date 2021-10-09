@@ -9,6 +9,7 @@
       size="small"
       round
       icon="search"
+      to="/search"
       >
         搜索
       </van-button>
@@ -90,11 +91,9 @@ export default {
   methods: {
     // 自定义函数，用于获取用户频道列表
     async loadChannels () {
-      console.log('loadChannels')
       try {
         let channelsTemp = [] // 用于临时存储频道列表
         if (this.user) {
-          console.log('已登陆', this.user)
           // 已登录，通过接口获取用户频道列表
           // { data }：的意思是将获取到的数据中，仅将 data 对象原地解构到这里，便于后续使用
           // 如果这里直接使用 data 接收也可以，后面使用时就要使用 data.data
@@ -102,7 +101,6 @@ export default {
           // 将获取到的频道列表数据存储到 channelsTemp 数组中
           channelsTemp = data.data.channels
         } else {
-          console.log('未登陆')
           // 未登录，判断是否有本地存储
           const localChannels = getItem('TOUTIAO_CHANNELS')
           if (localChannels) {
