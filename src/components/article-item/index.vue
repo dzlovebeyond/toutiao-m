@@ -1,6 +1,20 @@
 <template>
+  <!-- 在 van-cell 设置路由路转到文章详情，并拼接文章 id 号 -->
+  <!-- 三种方式都可以： -->
+  <!-- 字符串拼接方式 :to="'/article/' + article.art_id" -->
+  <!-- ES6拼接方式 :to="`/article/${article.art_id}`"-->
+  <!-- 对象的方式 {...略，如下面代码} -->
   <van-cell
     class="article-item"
+    :to="{
+      // name为路由名称
+      name: 'article',
+      // params为路由动态参数
+      params: {
+        // articleId为属性名，即动态路由参数名称
+        articleId: article.art_id
+      }
+    }"
   >
     <!-- 插槽-标题 -->
     <div slot="title" class="title van-multi-ellipsis--l2">{{ article.title }}</div>

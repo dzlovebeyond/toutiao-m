@@ -49,6 +49,15 @@ const routes = [{
     component: () =>
       import('@/views/my')
   }]
+},
+{
+  // 文章详情
+  // path: '/article/:articleId'：为动态路由，表示后面可以跟一个文章id的参数
+  path: '/article/:articleId',
+  name: 'article',
+  component: () =>
+    import('@/views/article'),
+  props: true // 开启路由传参数功能，将参数传递给 props
 }
 ]
 
