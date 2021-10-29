@@ -37,12 +37,10 @@ export default {
       try {
         if (this.value === 1) {
           // 已点赞状态，取消点赞
-          const { data } = await deleteLike(this.articleId)
-          console.log(data)
+          await deleteLike(this.articleId)
         } else {
           // 未点赞状态，点赞
-          const { data } = await addLike(this.articleId)
-          console.log(data)
+          await addLike(this.articleId)
         }
         // 操作接口后，给出成功提示
         this.$toast.success(this.value === 1 ? '取消点赞' : '点赞成功')

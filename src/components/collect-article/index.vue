@@ -39,12 +39,10 @@ export default {
       try {
         if (this.value) {
           // 已收藏状态，取消收藏
-          const { data } = await deleteCollect(this.articleId)
-          console.log(data)
+          await deleteCollect(this.articleId)
         } else {
           // 未收藏状态，添加收藏
-          const { data } = await addCollect(this.articleId)
-          console.log(data)
+          await addCollect(this.articleId)
         }
         // 修改后台收藏状态后，更新视图
         // 调用父组件 v-model 默认事件 input，更新父组件 article.is_collected 状态为原状态的取反操作

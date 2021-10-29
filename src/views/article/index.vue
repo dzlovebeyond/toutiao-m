@@ -94,6 +94,14 @@
         <!-- ref：是 vue 提供的获取 DOM 元素的方法，这里用于获取 article.content 中的 DOM 图片 -->
         <div class="article-content markdown-body" v-html="article.content" ref="article-content"></div>
         <van-divider>正文结束</van-divider>
+        <!-- 评论列表 -->
+        <CommentList
+          :source="article.art_id"
+          :list="commentList"
+          @onload-success="totalCommentCount = $event"
+          @reply-click="onReplyClick"
+        />
+        <!-- /评论列表 -->
 
         <!-- 底部区域 -->
         <div class="article-bottom">
@@ -102,10 +110,11 @@
             type="default"
             round
             size="small"
+            @click="isPostShow = true"
           >写评论</van-button>
           <van-icon
             name="comment-o"
-            info="123"
+            :info="totalCommentCount"
             color="#777"
           />
           <!-- 收藏 -->
@@ -125,6 +134,16 @@
           <van-icon name="share" color="#777777"></van-icon>
         </div>
         <!-- /底部区域 -->
+
+        <!-- 发布评论 -->
+        <van-popup
+          v-model="isPostShow"
+          position="bottom"
+        >
+          <CommentPost :target="article.art_id" @post-success="onPostSuccess" />
+        </van-popup>
+        <!-- /发布评论 -->
+
       </div>
       <!-- /加载完成-文章详情 -->
 
@@ -145,6 +164,20 @@
       <!-- /加载失败：其它未知错误（例如网络原因或服务端异常） -->
     </div>
 
+    <!-- 评论回复 -->
+    <van-popup
+      v-model="isReplyShow"
+      position="bottom"
+      style="height: 100%"
+    >
+      <CommentReply
+        v-if="isReplyShow"
+        :comment="currentComment"
+        @close="isReplyShow = false"
+      />
+    </van-popup>
+    <!-- /评论回复 -->
+
   </div>
 </template>
 
@@ -159,6 +192,12 @@ import FollowUser from '@/components/follow-user'
 import CollectAtricle from '@/components/collect-article'
 // 引入 点赞 组件
 import LikeAtricle from '@/components/like-article'
+// 引入 评论列表 组件
+import CommentList from './components/comment-list'
+// 引入 写评论 组件
+import CommentPost from './components/comment-post'
+// 引入 评论的回复 组件
+import CommentReply from './components/comment-reply'
 
 export default {
   name: 'ArticleIndex',
@@ -168,7 +207,19 @@ export default {
     // 注册 收藏 组件
     CollectAtricle,
     // 注册 点赞 组件
-    LikeAtricle
+    LikeAtricle,
+    // 注册 评论列表 组件
+    CommentList,
+    // 注册 写评论 组件
+    CommentPost,
+    // 注册 评论的回复 组件
+    CommentReply
+  },
+  provide: function () {
+    // provide 和 inject 用于给所有后代组件传值的用法
+    return {
+      articleId: this.articleId // 将文章id传给所有后代组件
+    }
   },
   props: {
     // 解耦路由中的参数
@@ -181,7 +232,12 @@ export default {
     return {
       article: {}, // 存储文章详情
       loading: true, // 控制加载状态，true 显示 loading图标，false 隐藏
-      errStatus: 0 // 失败状态码，用于判断是404还是其它失败
+      errStatus: 0, // 失败状态码，用于判断是404还是其它失败
+      totalCommentCount: 0, // 评论总数量
+      isPostShow: false, // 写评论 弹出层
+      commentList: [], // 评论列表
+      isReplyShow: false, // 评论回复 弹出层
+      currentComment: {} // 当前点击回复的评论项
     }
   },
   created () {
@@ -237,6 +293,16 @@ export default {
         }
       })
       // console.log(images)
+    },
+    // 子组件发布完评论后，关闭弹出层、将发布内容更新到列表顶部
+    onPostSuccess (data) {
+      this.isPostShow = false // 关闭弹出层
+      this.commentList.unshift(data.new_obj) // 将发布内容更新到列表顶部
+    },
+    // 处理评论的回复
+    onReplyClick (comment) {
+      this.isReplyShow = true // 显示评论回复弹出层
+      this.currentComment = comment // 保存当前回复的评论项内容
     }
   }
 }
