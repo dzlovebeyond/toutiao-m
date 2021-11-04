@@ -58,6 +58,13 @@ const routes = [{
   component: () =>
     import('@/views/article'),
   props: true // 开启路由传参数功能，将参数传递给 props
+},
+{
+  // 用户资料
+  path: '/user/profile',
+  name: 'user-profile',
+  component: () =>
+    import('@/views/user-profile')
 }
 ]
 
